@@ -1,0 +1,18 @@
+### Secure authentication script against Hackism
+- [x] 1-Log out and reset/forget the password mechanism.
+- [ ] // Out for now 2-Reload the passnumber table to try again button.
+- [x] 3-Session timeout.
+- [ ] // Out for now 4-Autorefresh (passnumber table only) after 5 attempts.
+- [x] 5-Don't repeat usernames registration.
+- [x] 6-Limit users to above 4 chars.
+- [x] 7-Don't allow empty usernames.
+- [x] 8-Nonsensitive letter case usernames.
+- [x] 9-Laravel the script.
+- [x] 10-CSRF, XSS is included also. 
+- [ ] BONUS: We need some work for ClickJacking, Host Header Injection]]
+- [x] 11-CSRF, SQL Injection
+- [x] 12-BruteForce is covered by Session Timeout but 
+- [x] BONUS: We can also use Google ReCaptcha to be oversure.
+- [x] 13-Verify User Registration, Forgot Password, Email Template, Reset Password, Token Expiration.
+- [x] 14-"Unique Usernames, Character Limit, empty username, sensitivity" should be available when script create the database.
+- [ ] 15-Ready-to-go product for download purposes (fro customers).  [[ After full project is done]]
