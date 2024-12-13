@@ -8,10 +8,10 @@ use App\RegularPass;
 use App\Mail\UserResetPassword;
 use App\Mail\UserSignUp;
 use App\PassIcons;
-use Mail;
-use Str;
-use Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 // use App\Mail\ResetPilotPassword;
 class AppUserController extends Controller
 {
@@ -95,145 +95,6 @@ class AppUserController extends Controller
 
 
 
-
-
-
-
-
-
-
-
-
-        /*
-        // 
-
-        $all = Session::get('signup_array');
-
-        $pinu = [];
-        foreach($_img_source[0] as $key=>$val)
-        {
-            array_push($pinu,$key);
-        }
-        // 
-
-        $_parent_row = [];
-
-        // dd($all);
-        foreach($all as $key=>$val)
-        {
-            foreach($val as $k=>$v)
-            {
-                array_push($_parent_row,substr($k,0,1));
-            }
-        }
-
-        $_dad_array = array_unique($_parent_row);
-
-        // dd($_dad_array);
-        $_new_parent = [];
-        $_all_inc_session = [1,2,3,4,5,6,7,8,9];
-
-        $_not_in_session = array_diff($_all_inc_session,$_dad_array);
-        // 
-        $kk = 0;
-        $_child_col = "";
-        $_child_col_key = "";
-        foreach($_dad_array as $get_child)
-        {
-            $_prep = $all[$kk];
-            // dd($_prep);
-            foreach($_prep as $kkkk=>$vvvv)
-            {
-                $_child_col .= $vvvv.",";
-                $_child_col_key .= $kkkk.",";
-            }
-            $_no_comma = substr($_child_col,0,-1);
-            $_no_comma_key = substr($_child_col_key,0,-1);
-
-            $_child_arr = explode(",",$_no_comma);
-            $_child_key = explode(",",$_no_comma_key);
-
-            $_survived_img = array_diff($parent_array[$get_child-1]["img"], $_child_arr);
-            $_survived_img_ids = array_diff($parent_array[$get_child-1]["id"], $_child_key);
-
-            $_num_id = '';
-            $_num_val = '';
-            foreach($_survived_img_ids as $_img_k=>$_img_v)
-            {
-                $_num_id .= $_img_v.',';
-            }
-            foreach($_survived_img as $_img_k=>$_img_v)
-            {
-                $_num_val .= $_img_v.',';
-            }
-            
-
-            $_del_id_comma = substr($_num_id,0,-1);
-            $_del_img_comma = substr($_num_val,0,-1);
-
-
-
-            // $_del_id_comma = (int)$_del_id_comma;
-            $_add_key_one = array_map('intval',explode(",",$_del_id_comma));
-            $_add_key_two = explode(",",$_del_img_comma);
-
-            // dd($_add_key_one);
-
-            $_middle_arr = [
-                "id"   => $_add_key_one,
-                "img"  => $_add_key_two
-            ];
-            $_middle_arr2 = [];
-            // array_push($_middle_arr,$_add_key_one);
-            // array_push($_middle_arr2,$_add_key_two);
-
-            // dd($_middle_arr);
-            $_merging_new = array_combine($_add_key_one,$_add_key_two);
-
-            array_push($_new_parent,$_middle_arr);
-            // dd($_merging_new);
-
-
-            $kk++;
-        }
-
-
-        // Getting unsessioned rows
-        $_new_parent2 = [];
-        foreach($_not_in_session as $nkey=>$nvalue)
-        {
-            array_push($_new_parent2,$parent_array[$nkey]);
-        }
-
-        $_combining_all = array_merge($_new_parent,$_new_parent2);
-        dd($_combining_all);
-
-
-        // dd(substr($_child_col,0,-1));
-
-
-
-
-        //
-
-
-        */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         $items = array_slice($parent_array,0,$rows); // slice first $row items
 
         // Get Colomn // This will be from database in login screen
@@ -307,27 +168,43 @@ class AppUserController extends Controller
     {
         // return $request->all();
 
-        if($request->rows!=strlen($request->password))
-        {
-            return 'you did not fill every row!';
+       // Updated validation logic
+       if ($request->rows != strlen($request->password)) {  
+        return 'You did not fill every row!';  
+    } else {  
+        $chars = str_split($request->password);  
 
-            
-        }
-        else 
-        {
-            $chars = str_split($request->password);
+        if (max($chars) > $request->cols) {  
+            return 'You entered numbers which were not presented!';  
+        }  
 
-            if(max($chars)>$request->cols)
-            {
-                return 'you entered numbers which were not presented!';
-            }
-        }
+        // Count the number of zero icons in the pass-number  
+        $zeroCount = substr_count($request->password, '0');  
+
+        // Calculate the grid size  
+        $gridSize = $request->rows * $request->cols;  
+
+        // Validate the number of zero icons based on grid size  
+        if ($gridSize <= 16 && $zeroCount < 1) {  
+            return 'Your pass-number must include at least one zero icon.';  
+        } elseif ($gridSize > 16 && $gridSize <= 25 && $zeroCount < 2) {  
+            return 'Your pass-number must include at least two zero icons.';  
+        } elseif ($gridSize > 25 && $gridSize <= 49 && $zeroCount < 3) {  
+            return 'Your pass-number must include at least three zero icons.';  
+        } elseif ($gridSize > 49 && $gridSize <= 64 && $zeroCount < 4) {  
+            return 'Your pass-number must include at least four zero icons.';  
+        }  
+    }
 
 
-        $messages = array(
-            'usermail.unique' => 'The E-mail is already taken.',
-            'usermail.required' => 'You must provide a valid E-mail.',
-        );
+        $messages = [
+            'username.required' => 'Username is required.',
+            'username.unique' => 'Username already exists.',
+            // 'usermail.required' => 'You must provide a valid E-mail.', // Email validation message disabled
+            // 'usermail.email' => 'You must provide a valid E-mail.', // Email validation message disabled
+            'password.required' => 'Password is required.',
+            'regularpass.required' => 'Regular password is required.',
+        ];
         $validator = Validator::make($request->all(), [
             'username' => 'required|min:4|max:32|unique:users,username',
             'usermail' => 'required|email:rfc,dns|unique:users,email',
@@ -401,11 +278,6 @@ class AppUserController extends Controller
                 return false;
             }
         }
-        
-        // echo "<pre>";
-        // print_r($dumb);
-        // print_r(Session::get('signup_array'));
-
     }
 
     public function expert_login(Request $request)
@@ -917,14 +789,19 @@ class AppUserController extends Controller
     
     public function signup(Request $request)
 	{
-        // return $request->all();
-        $messages = array(
+        return $request->all();
+
+        $messages = [
+            'username.required' => 'Username is required.',
+            'username.unique' => 'Username already exists.',
+            'password.required' => 'Password is required.',
+            'regularpass.required' => 'Regular password is required.',
             'usermail.unique' => 'The E-mail is already taken.',
             'usermail.required' => 'You must provide a valid E-mail.',
-        );
+        ];
         $validator = Validator::make($request->all(), [
             'username' => 'required|min:4|max:32|unique:users,username',
-            'usermail' => 'required|email:rfc,dns|unique:users,email',
+         //   'usermail' => 'required|email:rfc,dns|unique:users,email',
             'password' => 'required|min:4|max:4',
             'regularpass'   =>  'required|min:8'
         ],$messages);
@@ -936,31 +813,9 @@ class AppUserController extends Controller
             $email       = strtolower($request->usermail);
             $user_login = trim(strtolower($request->username));
             $userPassnumber = trim($request->password);
-            // Narallah's Code
-            /* $user_login = trim(strtolower($request->username));
-            $userPassnumber = trim($request->password);
-            $passnumber = str_split($userPassnumber);
-			$_values = array(
-				array(0,1,2,3,4), // 1
-				array(0,10,20,30,40), // 2
-				array(0,100,200,300,400), // 3
-				array(0,1000,2000,3000,4000), // 4
-
-			);
-            $password_value = ($_values[0][$passnumber[0]]) + ($_values[1][$passnumber[1]]) + ($_values[2][$passnumber[2]])+ ($_values[3][$passnumber[3]]) ; 
-            $zerosPs = array_keys($passnumber, "0"); // get the position of zero
-            // return $zerosPs;
-            // return $_values[3][$passnumber[3]];
-            $zeroz_rows = (end($_values[$zerosPs[0]])); // 
-            // return $password_value;
-            $pv = ($password_value + $zeroz_rows);
-
-            $pvn = $this->reverse_saima($userPassnumber); // my one liner to do 355-369 codes work
-
-            return $pv.$pvn;*/
+            
             
 
-            // Nasrallah's code's end
             $pvn = $this->reverse_saima($userPassnumber);
             $user_pass = bcrypt($pvn); 
 

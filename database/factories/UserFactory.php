@@ -5,6 +5,7 @@
 use App\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +27,28 @@ $factory->define(User::class, function (Faker $faker) {
         'remember_token' => Str::random(10),
     ];
 });
+
+$messages = [
+    'username.required' => 'Username is required.',
+    'username.unique' => 'Username already exists.',
+    // 'usermail.required' => 'You must provide a valid E-mail.', // Email validation message disabled
+    // 'usermail.email' => 'You must provide a valid E-mail.', // Email validation message disabled
+    'password.required' => 'Password is required.',
+   // 'regularpass.required' => 'Regular password is required.',
+];
+
+$validator = Validator::make($request->all(), [
+    'username' => 'required|min:4|max:32|unique:users,username',
+    // 'usermail' => 'required|email|unique:users,email', // Email validation disabled
+    'password' => 'required|min:4|max:4',
+    //'regularpass' => 'required|min:8' // Email validation disabled
+], $messages);
+
+if ($validator->fails()) {
+    return redirect()->back()->withErrors($validator)->withInput();
+}
+
+// Registration logic here
+
+// Send notification for successful registration
+// Your notification logic here

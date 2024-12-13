@@ -60,44 +60,7 @@
   <body>
     <div class="container-fluid">
       <div class="row mt-5">
-        <!-- <div class="col-md-6 pl-5">
-          <div id="warnings" class="bg-white pl-5 pt-3 pr-5 pb-3">
-            <p class="req">Validation Rules</p>
-            <p class="condition username" id="pinux5">
-              <i class="fas fa-check-circle"></i>
-              <i class="fas fa-info-circle"></i>
-              1. Enter your Username 
-            </p> 
-            <p class="condition digit" id="pinux0"> 
-            <i class="fas fa-check-circle"></i>
-              <i class="fas fa-info-circle"></i>
-              2. Chose 1 icon from each category starting from the first row/category and enter its location number only (e.g. enter “1” for “Fish plate”)
-            </p>
-            <p class="condition digit-two" id="pinux1"> 
-            <i class="fas fa-check-circle"></i>
-              <i class="fas fa-info-circle"></i>
-              3. Repeat the previous step for next rows 2 and 3. (E.g. enter again “1” for “Apple” and enter again “1” for “Cow”.
-            </p>
-            <p class="condition zero" id="pinux2">
-            <i class="fas fa-check-circle"></i>
-              <i class="fas fa-info-circle"></i>
-               4. Enter “0” to represent nothing from row 4 (You should forget (neglect) 1 row/category and represent that by entering "0". E.g. if you selected “Fish plate” and “Apple” then “Cow” and you won’t any icons from the last category, simply enter passnumber: 1110).
-            </p>
-            <p class="condition maxrange" id="pinux3">
-            <i class="fas fa-check-circle"></i>
-              <i class="fas fa-info-circle"></i>
-              5. It is up to you to neglect any category of above by replacing its location number by “0”. One category only to be neglected. Try it.</p>
-            <p class="condition limited" id="pinux4"> 
-            <i class="fas fa-check-circle"></i>
-              <i class="fas fa-info-circle"></i>
-              6. Insert Only 0-4 numbers
-            </p>
-            <p class="condition indexlogin">
-            <i class="fas fa-check-circle"></i>
-              <i class="fas fa-info-circle"></i>
-              7. You only need to memorize your icons, not the passnumber! Did you memorize the icons of yours?</p>
-          </div>
-        </div> -->
+       
         <div class="col-md-4 mx-auto">
           <div class="image-wrapper pb-3">
             
@@ -164,7 +127,7 @@
                 <div class="form-group">
                   <div class="from-grou">
                     <input type="text" class="form-control" id="usermail" name="usermail" maxlength="30" placeholder="Email" value="{{ old('usermail') }}"/>
-                    @if ($errors->has('usermail')) <span style="color:red;">{{ $errors->first('usermail') }}</span> @endif
+                    @if ($errors->has('usermail')) <span style="color:rgb(9, 245, 60);">{{ $errors->first('usermail') }}</span> @endif
                   </div>
                 </div>
               </div>
@@ -326,26 +289,6 @@
     </script>
     <script src="{{ asset('passnumber/js/jquery.fancybox.min.js')}}"></script>
     <!-- <script src="{{ asset('passnumber/js/jquery.passwordstrength.js')}}"></script> -->
-    <!-- <script>
-      var status;
-      $(function(){
-          $('input#userpass').passwordstrength();
-          $('input#username').usernamevalidation();
-          
-          $('input[type=text]').on('keyup',function(e){
-            setTimeout(function(){ 
-              if($("#pinux0").hasClass("valid") && $("#pinux1").hasClass("valid") && $("#pinux2").hasClass("valid") && $("#pinux3").hasClass("valid") && $("#pinux4").hasClass("valid") && $("#pinux5").hasClass("valid"))
-              {
-                $('input#submit-button').removeAttr("disabled");
-                $("#regularpassholder").show();
-              } else {
-                $('input#submit-button').attr("disabled","disabled");
-                $("#regularpassholder").hide();
-              }
-             }, 400);
-          });
 
-      });
-    </script> -->
   </body>
 </html>
